@@ -1,0 +1,28 @@
+{
+    "name": "clearswitch/signatrue",
+    "description": "api signatrue",
+    "type": "library",
+    "license": "MIT",
+    "keywords": [
+        "api",
+        "auth",
+        "signatrue"
+    ],
+    "require": {
+
+    },
+    "autoload": {
+        "psr-4": {
+            "ClearSwitch\\Signatrue\\": "src"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "extra": {
+        "laravel": {
+            "providers": [
+                "ClearSwitch\\Signatrue\\SignatrueProvider"
+            ]
+        }
+    }
+}
