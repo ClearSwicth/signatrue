@@ -50,7 +50,6 @@ class SignatrueGuard implements Guard {
         if($this->signatrue->validated()){
             $user=$this->provider->retrieveById($this->signatrue->getUserId());
         }
-        print_R($user);exit;
         return $this->user=$user;
     }
 
