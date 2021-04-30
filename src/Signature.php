@@ -43,8 +43,12 @@ class Signature
     /**
      * @var 有效时间
      */
-    protected $vailRequestPeriod = 3600;
+    protected static $vailRequestPeriod = 3600;
 
+    /**
+     * @var int token默认的有效时间为一周
+     */
+    public  static $tokenPeriod=604800;
     /**
      * 设置提供者
      * @param $provider
@@ -81,10 +85,10 @@ class Signature
         $path = $this->request->path();//获得请求地址
         $requestMethod = $this->request->method();//获得请求方法
         return $this->vailRequest($input)
-               && $this->vailRequestTime($input['ts'])
-               && $this->vialUser($input['user_id'])
-               && $this->vailLoginStatus()
-               && $this->vailSign($input,$requestMethod,$path);
+            && $this->vailRequestTime($input['ts'])
+            && $this->vialUser($input['user_id'])
+            && $this->vailLoginStatus()
+            && $this->vailSign($input,$requestMethod,$path);
     }
 
     /**
@@ -100,7 +104,6 @@ class Signature
                 return false;
             }
         }
-
         return true;
     }
 
@@ -112,7 +115,7 @@ class Signature
      */
     public function vailRequestTime($ts)
     {
-        if (time() - $ts > $this->vailRequestPeriod) {
+        if (time() - $ts > static::$vailRequestPeriod) {
             $this->errCode = 40302;
             $this->errMessage = '请求过期';
             return false;
@@ -145,7 +148,7 @@ class Signature
     {
         if ($this->user->token_expired_at < time()) {
             $this->errCode = 40304;
-            $this->errMessage = '用户不存在的';
+            $this->errMessage = '登陆过期';
             return false;
         }
         return true;
@@ -159,13 +162,13 @@ class Signature
      * @author daikai
      */
     public function vailSign($input,$requestMethod,$path){
-       $sign=$this->makeSign($input,$requestMethod,$path);
-       if($sign!=$input['sign']){
+        $sign=$this->makeSign($input,$requestMethod,$path);
+        if($sign!=$input['sign']){
             $this->errCode = 40305;
             $this->errMessage = '签名验证失败:'.$sign;
             return false;
-       }
-       return true;
+        }
+        return true;
     }
 
     /**
@@ -176,16 +179,16 @@ class Signature
      * @author daikai
      */
     public function makeSign($input,$requestMethod,$path){
-       unset($input['sign']);
-       ksort($input);
-       $str='';
-       foreach($input as $key=>$item){
-           $str.=$key.$item;
-       }
-       $str.=$this->user->api_token;
-       $str.=$requestMethod;
-       $str.=$path;
-       return sha1($str);
+        unset($input['sign']);
+        ksort($input);
+        $str='';
+        foreach($input as $key=>$item){
+            $str.=$key.$item;
+        }
+        $str.=$this->user->api_token;
+        $str.=$requestMethod;
+        $str.=$path;
+        return sha1($str);
     }
 
     public function getErrMessage(){
@@ -206,4 +209,21 @@ class Signature
         return $this->user->id;
     }
 
+    /**
+     * 设置签名的过期时间时间，
+     * @param $timestamp
+     * @author daikai
+     */
+    public static function setVailRequestPeriod($timestamp){
+        static::$vailRequestPeriod=$timestamp;
+    }
+
+    /**
+     * 设置token的过期时间
+     * @param $timetamp
+     * @author daikai
+     */
+    public static function setTokenPeriod($timetamp){
+        static::$tokenPeriod=$timetamp;
+    }
 }

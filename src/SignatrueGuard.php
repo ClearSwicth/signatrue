@@ -5,12 +5,12 @@ namespace ClearSwitch\Signatrue;
  */
 
 use App\Models\AdminUser;
+use ClearSwitch\Signatrue\Signature;
 use Illuminate\Auth\GuardHelpers;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use ClearSwitch\Signatrue\Signature;
 class SignatrueGuard implements Guard {
     use GuardHelpers;
 
@@ -28,7 +28,7 @@ class SignatrueGuard implements Guard {
      * @param UserProvider $provider
      * @param Request $request
      */
-    public function __construct(Signature $signatrue,UserProvider $provider,Request $request)
+    public function  __construct(Signature $signatrue,UserProvider $provider,Request $request)
     {
         $this->signatrue=$signatrue;
         $this->provider=$provider;
@@ -50,6 +50,7 @@ class SignatrueGuard implements Guard {
         if($this->signatrue->validated()){
             $user=$this->provider->retrieveById($this->signatrue->getUserId());
         }
+        print_R($user);exit;
         return $this->user=$user;
     }
 
@@ -96,7 +97,7 @@ class SignatrueGuard implements Guard {
      */
     protected function refreshToken(AdminUser $user){
         $user->api_token=Str::random(60);
-        $user->token_expired_at=time()+18000;
+        $user->token_expired_at=time()+$this->signatrue::$tokenPeriod;
         $user->save();
         return $user->api_token;
     }

@@ -11,12 +11,18 @@
             'driver' => 'eloquent',
             'model' => App\Models\AdminUser::class,
         ],
-数据库的模型自己定义，但是数据biao 必须要有
-username；api_token；token_expired_at 这三个字段
-
-## 在kernel.php 中这册中间件
+```
+##数据库的模型自己定义，但是数据biao 必须要有
 ```php
-use ClearSwitch\Signatrue\Middleware\SignatrueAuthenticate;
-
-'auth.signatrue'=>SignatrueAuthenticate::class
+username；api_token；token_expired_at 这三个字段
+```
+## 在App\Providers\AuthServiceProvider.php 中的bool中设置 签名，api_token 的过期时间
+```php
+use ClearSwitch\Signatrue\Signature;
+Signature::setTokenPeriod(时间戳);
+Signature::setVailRequestPeriod(时间戳);
+```
+##路由中间的调用
+```php
+Route::middleware('auth.signatrue')
 ```
