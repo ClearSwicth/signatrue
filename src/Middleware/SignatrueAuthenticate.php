@@ -19,7 +19,7 @@ class SignatrueAuthenticate
      */
     public function handle(Request $request, Closure $next)
     {
-        $guard=Auth::guard('mytoken');
+        $guard=Auth::guard('api');
         if(!$guard->validated()){
             $result=[
                 'code'=>$guard->getErrCode(),
