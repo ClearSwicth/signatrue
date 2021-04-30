@@ -4,7 +4,6 @@ namespace ClearSwitch\Signatrue;
  * 自定义守卫者
  */
 
-use App\Models\AdminUser;
 use ClearSwitch\Signatrue\Signature;
 use Illuminate\Auth\GuardHelpers;
 use Illuminate\Contracts\Auth\Guard;
@@ -90,11 +89,11 @@ class SignatrueGuard implements Guard {
 
     /**
      * 刷新token
-     * @param AdminUser $user
+     *
      * @return mixed|string
      * @author daikai
      */
-    protected function refreshToken(AdminUser $user){
+    protected function refreshToken($user){
         $user->api_token=Str::random(60);
         $user->token_expired_at=time()+$this->signatrue::$tokenPeriod;
         $user->save();
