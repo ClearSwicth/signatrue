@@ -26,3 +26,7 @@ Signature::setVailRequestPeriod(时间戳);
 ```php
 Route::middleware('auth.signatrue')
 ```
+##请求参数中必须要有三个参数
+```php
+ts,user_id,sign
+```
