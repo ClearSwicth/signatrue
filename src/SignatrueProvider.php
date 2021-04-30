@@ -32,13 +32,13 @@ class SignatrueProvider extends ServiceProvider {
     public function boot(){
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
         $this->loadRoutesFrom(__DIR__ . '/../routes/api.php');
-        //$this->aliasMiddlewares();
+        $this->aliasMiddlewares();
         $this->registerGuards();
     }
 
     protected function aliasMiddlewares(){
         $router=$this->app['router'];
-        $method=method_exists($router,'aliasMiddlewares')?'aliasMiddlewares':'middleware';
+        $method=method_exists($router,'aliasMiddleware')?'aliasMiddleware':'middleware';
         foreach ($this->middleware as $alias=>$middleware){
             $router->$method($alias,$middleware);
         }
