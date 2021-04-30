@@ -70,7 +70,7 @@ class SignatrueGuard implements Guard {
      */
     public function attempt($credentials,$login=true){
         $user=$this->provider->retrieveByCredentials($credentials);
-        if($this->hasValidCredentials($user,$credentials)){
+        if(!empty($user) && $this->hasValidCredentials($user,$credentials)){
             return $login?$this->login($user):true;
         }
         return false;
