@@ -5,6 +5,7 @@
 namespace ClearSwitch\Signatrue;
 
 use ClearSwitch\Signatrue\Middleware\SignatrueAuthenticate;
+use ClearSwitch\Signatrue\Middleware\WebSignatrueAuthenticate;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
 use ClearSwitch\Signatrue\SignatrueGuard;
@@ -16,7 +17,8 @@ class SignatrueProvider extends ServiceProvider {
      * @var string[]
      */
     protected $middleware=[
-        'auth.signatrue'=>SignatrueAuthenticate::class
+        'auth.signatrue'=>SignatrueAuthenticate::class,
+        'auth.web-signatrue'=>WebSignatrueAuthenticate::class
     ];
 
     /**
